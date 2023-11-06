@@ -29,9 +29,8 @@ jobs:
     - name: Update deployment file
       run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|registry.digitalocean.com/k8s-private-registery/nodejs-test:'${TAG}'|' $GITHUB_WORKSPACE/config/deployment.yaml
 
-    - name: Access cloned repository content
+    - name: Kustomize Build
       run: |
-        cat $GITHUB_WORKSPACE/config/deployment.yaml
         cd $GITHUB_WORKSPACE/config
         kustomize build . > build.yaml
 
