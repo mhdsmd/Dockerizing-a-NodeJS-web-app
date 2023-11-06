@@ -43,7 +43,7 @@ jobs:
     #     enable_alpha_plugins: true
     
     - name: 'Kustomize Build'
-      uses: imranismail/setup-kustomize@v2
+      - uses: imranismail/setup-kustomize@v2
       - run: |
           cd $GITHUB_WORKSPACE/config
           kustomize build . > build.yaml
