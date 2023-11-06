@@ -59,7 +59,7 @@ jobs:
       run: kubectl apply -f $GITHUB_WORKSPACE/config/build.yaml
 
     - name: Verify deployment
-      run: kubectl rollout status deployment/nodejs-test
+      run: kubectl rollout status deployment/nodejs-test -n beta
   
     # - name: Clone Deployment config Repository
     #   uses: GuillaumeFalourd/clone-github-repo-action@v2.2
