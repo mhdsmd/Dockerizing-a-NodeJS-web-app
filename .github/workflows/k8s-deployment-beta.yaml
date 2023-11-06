@@ -34,13 +34,13 @@ jobs:
         cat $GITHUB_WORKSPACE/config/deployment.yaml
     
     - name: 'Kustomize Build'
-        uses: karancode/kustomize-github-action@master
-        with:
-          kustomize_version: '3.0.0'
-          kustomize_build_dir: '.'
-          kustomize_comment: true
-          kustomize_output_file: "$GITHUB_WORKSPACE/config/build.yaml"
-          enable_alpha_plugins: true
+      uses: karancode/kustomize-github-action@master
+      with:
+        kustomize_version: '3.0.0'
+        kustomize_build_dir: '.'
+        kustomize_comment: true
+        kustomize_output_file: "$GITHUB_WORKSPACE/config/build.yaml"
+        enable_alpha_plugins: true
     
     - name: Access cloned repository content
       run: |
