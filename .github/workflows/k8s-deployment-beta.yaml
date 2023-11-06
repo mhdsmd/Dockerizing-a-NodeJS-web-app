@@ -15,7 +15,7 @@ jobs:
     - name: Install doctl
       uses: digitalocean/action-doctl@v2
       with:
-        token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+        token: ${{ DIGITALOCEAN_ACCESS_TOKEN }}
 
     - name: Build container image
       run: docker build -t registry.digitalocean.com/k8s-private-registery/nodejs-test:$(echo $GITHUB_SHA | head -c7) .
