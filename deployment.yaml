@@ -11,7 +11,7 @@ spec:
   template:
     metadata:
       labels:
-        app:nodejs-test
+        app: nodejs-test
     spec:
       containers:
         - name: nodejs-test
