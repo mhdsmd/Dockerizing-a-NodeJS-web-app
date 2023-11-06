@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-test
+  namespace: beta
+spec:
+  # replicas: 3
+  selector:
+    matchLabels:
+      app: nodejs-test
+  template:
+    metadata:
+      labels:
+        app:nodejs-test
+    spec:
+      containers:
+        - name: nodejs-test
+          image: <IMAGE>
+          ports:
+            - containerPort: 8080
