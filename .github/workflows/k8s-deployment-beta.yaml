@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  build:
+  deployment:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout master
@@ -25,3 +25,27 @@ jobs:
 
     - name: Push image to DigitalOcean Container Registry
       run: docker push registry.digitalocean.com/k8s-private-registery/nodejs-test:$(echo $GITHUB_SHA | head -c7)
+    
+    - name: Update deployment file
+      run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|registry.digitalocean.com/<registry-name>/<repository_name>:'${TAG}'|' $GITHUB_WORKSPACE/config/deployment.yml
+
+    - name: Save DigitalOcean kubeconfig with short-lived credentials
+      run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 <cluster-name>
+
+    - name: Deploy to DigitalOcean Kubernetes
+      run: kubectl apply -f $GITHUB_WORKSPACE/config/deployment.yml
+
+    - name: Verify deployment
+      run: kubectl rollout status deployment/<deployment_name>
+  
+    - name: Clone Deployment config Repository
+      uses: GuillaumeFalourd/clone-github-repo-action@v2.2
+      with:
+        owner: 'vipers-team'
+        repository: 'gate-of-game-k8s'
+        access-token: ${{ secrets.ACCESS_TOKEN }}
+
+    - name: Access cloned repository content
+      run: |
+        cd gate-of-game-k8s
+        ls -la
