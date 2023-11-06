@@ -32,7 +32,7 @@ jobs:
     - name: Access cloned repository content
       run: |
         cat $GITHUB_WORKSPACE/config/deployment.yaml
-    
+
     # - name: 'Kustomize Build'
     #   uses: karancode/kustomize-github-action@master
     #   with:
@@ -46,7 +46,7 @@ jobs:
       run: |
           cd $GITHUB_WORKSPACE/config
           kustomize build . > build.yaml
-    
+
     - name: Access cloned repository content
       run: |
         cat $GITHUB_WORKSPACE/config/build.yaml
