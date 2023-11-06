@@ -7,24 +7,24 @@ on:
 
 jobs:
   deployment:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout master
-      uses: actions/checkout@main
+    # runs-on: ubuntu-latest
+    # steps:
+    # - name: Checkout master
+    #   uses: actions/checkout@main
     
-    - name: Install doctl
-      uses: digitalocean/action-doctl@v2
-      with:
-        token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    # - name: Install doctl
+    #   uses: digitalocean/action-doctl@v2
+    #   with:
+    #     token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-    - name: Build container image
-      run: docker build -t registry.digitalocean.com/k8s-private-registery/nodejs-test:$(echo $GITHUB_SHA | head -c7) .
+    # - name: Build container image
+    #   run: docker build -t registry.digitalocean.com/k8s-private-registery/nodejs-test:$(echo $GITHUB_SHA | head -c7) .
 
-    - name: Log in to DigitalOcean Container Registry with short-lived credentials
-      run: doctl registry login --expiry-seconds 1200
+    # - name: Log in to DigitalOcean Container Registry with short-lived credentials
+    #   run: doctl registry login --expiry-seconds 1200
 
-    - name: Push image to DigitalOcean Container Registry
-      run: docker push registry.digitalocean.com/k8s-private-registery/nodejs-test:$(echo $GITHUB_SHA | head -c7)
+    # - name: Push image to DigitalOcean Container Registry
+    #   run: docker push registry.digitalocean.com/k8s-private-registery/nodejs-test:$(echo $GITHUB_SHA | head -c7)
     
     # - name: Update deployment file
     #   run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|registry.digitalocean.com/<registry-name>/<repository_name>:'${TAG}'|' $GITHUB_WORKSPACE/config/deployment.yml
@@ -44,6 +44,7 @@ jobs:
         owner: 'vipers-team'
         repository: 'gate-of-game-k8s'
         access-token: ${{ secrets.ACCESS_TOKEN }}
+        branch: master
 
     - name: Access cloned repository content
       run: |
