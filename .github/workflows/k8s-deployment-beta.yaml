@@ -27,17 +27,30 @@ jobs:
       run: docker push registry.digitalocean.com/k8s-private-registery/nodejs-test:$(echo $GITHUB_SHA | head -c7)
     
     - name: Update deployment file
-      run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|registry.digitalocean.com/k8s-private-registery/nodejs-test:'${TAG}'|' $GITHUB_WORKSPACE/deployment.yaml
+      run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|registry.digitalocean.com/k8s-private-registery/nodejs-test:'${TAG}'|' $GITHUB_WORKSPACE/config/deployment.yaml
 
     - name: Access cloned repository content
       run: |
-        cat $GITHUB_WORKSPACE/deployment.yaml
+        cat $GITHUB_WORKSPACE/config/deployment.yaml
+    
+    - name: 'Kustomize Build'
+        uses: karancode/kustomize-github-action@master
+        with:
+          kustomize_version: '3.0.0'
+          kustomize_build_dir: '.'
+          kustomize_comment: true
+          kustomize_output_file: "$GITHUB_WORKSPACE/config/build.yaml"
+          enable_alpha_plugins: true
+    
+    - name: Access cloned repository content
+      run: |
+        cat $GITHUB_WORKSPACE/config/build.yaml
 
     - name: Save DigitalOcean kubeconfig with short-lived credentials
       run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 k8s-1-28-2-do-0-fra1-1699108257925
 
     - name: Deploy to DigitalOcean Kubernetes
-      run: kubectl apply -f $GITHUB_WORKSPACE/deployment.yaml
+      run: kubectl apply -f $GITHUB_WORKSPACE/config/build.yaml
 
     - name: Verify deployment
       run: kubectl rollout status deployment/nodejs-test
